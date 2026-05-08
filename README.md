@@ -22,3 +22,23 @@ Remediation Disruption
 
 1. hide target BPF programs & maps and ransomware processes → invisible to bpftool, bpftop, ps, top, procs, ls /proc ...
 2. protect ransomware processes against tracing and termination → anti-tracing and anti-killing mechanisms
+
+## 🚀 Artifact Description
+
+### Akira
+A traditional ransomware family used as a baseline target for evaluating eBPF-augmented evasive capabilities. **Decompression password: infected**
+
+### BlackCat
+A traditional ransomware family featuring advanced user-space evasion techniques, integrated for evaluating kernel-level enhancement effects. **Decompression password: infected**
+
+### Luna
+A traditional Rust-based ransomware sample used to assess compatibility with the eBPF adversarial component. **Decompression password: infected**
+
+### ransompayload
+The standalone ransomware encryption payload responsible for file encryption and attack execution.
+
+### bpfransom_v1
+The eBPF-augmented ransomware prototype that launches ransompayload and provides kernel-level stealth, feature deception, and remediation disruption capabilities.
+
+### bpfransom_component
+A reusable eBPF adversarial component that can be integrated into traditional ransomware families such as Akira, BlackCat, and Luna to enhance stealthiness, anti-analysis, and defense evasion capabilities.
